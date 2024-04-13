@@ -7,8 +7,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - "7000:7000"
+    volumes:
+      - .:/app
+      - /app/node_modules
     depends_on:
       - database
+    command: ["npx", "ts-node-dev", "--respawn", "--transpile-only", "src/app.ts"]
   database:
     image: mongo:latest
     ports:
