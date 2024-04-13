@@ -1,6 +1,7 @@
 version: '3'
 services:
   url-shortener-api:
+    image: guilhermelopes764/url-shortener-api
     build:
       context: .
       dockerfile: Dockerfile
