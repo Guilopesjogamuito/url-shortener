@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf dist",
     "build": "npm run clean && tsc",
-    "format": "npx prettier --write ."
+    "format": "npx prettier --write .",
+    "test": "npx jest"
   },
   "keywords": [
     "URL",
@@ -21,8 +21,11 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.12",
     "@types/node": "^20.12.7",
+    "jest": "^29.7.0",
     "prettier": "^3.2.5",
+    "ts-jest": "^29.1.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.4.5"
   }
