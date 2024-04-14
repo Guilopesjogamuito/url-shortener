@@ -18,10 +18,10 @@ export class URLController implements Controller {
     }
     const suffix = this.suffixCreator.createSuffix();
     try {
-      this.addUrl.add({ originalURL: httpRequest.body.url, suffix });
+      const addedURL = this.addUrl.add({ originalURL: httpRequest.body.url, suffix });
+      return ok(addedURL);
     } catch (error) {
       return serverError();
     }
-    return ok({});
   }
 }

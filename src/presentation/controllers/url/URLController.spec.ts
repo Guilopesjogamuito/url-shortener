@@ -14,15 +14,19 @@ describe('URLController', () => {
       return {
         originalURL: 'http://g.com',
         suffix: 'Suffix',
-        createdAt: new Date(),
-        expiresAt: new Date(),
+        createdAt: new Date(1),
+        expiresAt: new Date(1),
       };
     }
   }
 
+  const makeAddURL = (): AddURL => {
+    return new AddURLStub();
+  };
+
   const makeSut = (): { sut: URLController; suffixCreatorStub: SuffixCreatorStub; addURLStub: AddURLStub } => {
     const suffixCreatorStub = new SuffixCreatorStub();
-    const addURLStub = new AddURLStub();
+    const addURLStub = makeAddURL();
     return {
       sut: new URLController(suffixCreatorStub, addURLStub),
       suffixCreatorStub: suffixCreatorStub,
@@ -46,8 +50,13 @@ describe('URLController', () => {
       body: { url: 'http://g.com' },
     };
     const response = sut.handle(httpRequest);
-    const expected = ok({});
-    expect(response).toEqual(expected);
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual({
+      originalURL: 'http://g.com',
+      suffix: 'Suffix',
+      createdAt: new Date(1),
+      expiresAt: new Date(1),
+    });
   });
 
   it('Should call AddURL with correct values', () => {
