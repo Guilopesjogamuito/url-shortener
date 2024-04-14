@@ -1,3 +1,4 @@
+import { URLModel } from '../../../domain/models/url';
 import { MissingParamError, ServerError } from '../../errors';
 import { badRequest, ok, serverError } from '../../helpers/http-helper';
 import { URLController } from './URLController';
@@ -10,13 +11,15 @@ describe('URLController', () => {
     }
   }
   class AddURLStub implements AddURL {
-    add(addUrl: AddURLModel) {
-      return {
-        originalURL: 'http://g.com',
-        suffix: 'Suffix',
-        createdAt: new Date(1),
-        expiresAt: new Date(1),
-      };
+    async add(addUrl: AddURLModel): Promise<URLModel> {
+      return new Promise((resolve) =>
+        resolve({
+          originalURL: 'http://g.com',
+          suffix: 'Suffix',
+          createdAt: new Date(1),
+          expiresAt: new Date(1),
+        }),
+      );
     }
   }
 
@@ -34,22 +37,22 @@ describe('URLController', () => {
     };
   };
 
-  it('Should return 400 if no URL is provided', () => {
+  it('Should return 400 if no URL is provided', async () => {
     const { sut } = makeSut();
     const httpRequest = {
       body: {},
     };
-    const response = sut.handle(httpRequest);
+    const response = await sut.handle(httpRequest);
     const expected = badRequest(new MissingParamError('URL'));
     expect(response).toEqual(expected);
   });
 
-  it('Should return 200 if URL is provided', () => {
+  it('Should return 200 if URL is provided', async () => {
     const { sut } = makeSut();
     const httpRequest = {
       body: { url: 'http://g.com' },
     };
-    const response = sut.handle(httpRequest);
+    const response = await sut.handle(httpRequest);
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({
       originalURL: 'http://g.com',
@@ -59,26 +62,26 @@ describe('URLController', () => {
     });
   });
 
-  it('Should call AddURL with correct values', () => {
+  it('Should call AddURL with correct values', async () => {
     const { sut, suffixCreatorStub, addURLStub } = makeSut();
     const mockedSuffix = suffixCreatorStub.createSuffix();
     const addSpy = jest.spyOn(addURLStub, 'add');
     const httpRequest = {
       body: { url: 'http://g.com' },
     };
-    sut.handle(httpRequest);
+    await sut.handle(httpRequest);
     expect(addSpy).toHaveBeenCalledWith({ originalURL: httpRequest.body.url, suffix: mockedSuffix });
   });
 
-  it('Should call return 500 when add URL trows', () => {
+  it('Should call return 500 when add URL trows', async () => {
     const { sut, addURLStub } = makeSut();
-    jest.spyOn(addURLStub, 'add').mockImplementationOnce(() => {
-      throw new Error();
+    jest.spyOn(addURLStub, 'add').mockImplementationOnce(async () => {
+      return new Promise((_, reject) => reject(new Error()));
     });
     const httpRequest = {
       body: { url: 'http://g.com' },
     };
-    const httpResponse = sut.handle(httpRequest);
+    const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(500);
     expect(httpResponse).toEqual(serverError());
   });

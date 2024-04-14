@@ -6,5 +6,5 @@ export interface AddURLModel {
 }
 
 export interface AddURL {
-  add(urlObject: AddURLModel): URLModel;
+  add(urlObject: AddURLModel): Promise<URLModel>;
 }

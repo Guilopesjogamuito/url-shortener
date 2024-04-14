@@ -12,13 +12,13 @@ export class URLController implements Controller {
     this.addUrl = addUrl;
   }
 
-  handle(httpRequest: HttpRequest): HttpResponse {
+  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     if (!httpRequest.body.url) {
       return badRequest(new MissingParamError('URL'));
     }
     const suffix = this.suffixCreator.createSuffix();
     try {
-      const addedURL = this.addUrl.add({ originalURL: httpRequest.body.url, suffix });
+      const addedURL = await this.addUrl.add({ originalURL: httpRequest.body.url, suffix });
       return ok(addedURL);
     } catch (error) {
       return serverError();
