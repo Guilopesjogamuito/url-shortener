@@ -1,8 +1,7 @@
-import { MissingParamError } from '../errors/missing-param-error';
-import { badRequest, ok } from '../helpers/http-helper';
+import { MissingParamError } from '../../errors/missing-param-error';
+import { badRequest, ok } from '../../helpers/http-helper';
 import { URLController } from './URLController';
-import { SuffixCreator } from '../protocols';
-import { AddURL, AddURLModel } from '../../domain/use-cases/add-url';
+import { SuffixCreator, AddURL, AddURLModel } from './url-protocols';
 describe('URLController', () => {
   class SuffixCreatorStub implements SuffixCreator {
     createSuffix() {

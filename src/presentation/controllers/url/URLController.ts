@@ -1,7 +1,7 @@
-import { Controller, HttpRequest, HttpResponse, SuffixCreator } from '../protocols';
-import { badRequest, ok } from '../helpers/http-helper';
-import { MissingParamError } from '../errors/missing-param-error';
-import { AddURL } from '../../domain/use-cases/add-url';
+import { Controller, HttpRequest, HttpResponse, SuffixCreator, AddURL } from './url-protocols';
+import { badRequest, ok } from '../../helpers/http-helper';
+import { MissingParamError } from '../../errors/missing-param-error';
+import {} from '../../../domain/use-cases/add-url';
 
 export class URLController implements Controller {
   private readonly suffixCreator: SuffixCreator;
