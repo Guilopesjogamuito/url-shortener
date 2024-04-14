@@ -1,7 +1,8 @@
-import { MissingParamError } from '../../errors/missing-param-error';
-import { badRequest, ok } from '../../helpers/http-helper';
+import { MissingParamError, ServerError } from '../../errors';
+import { badRequest, ok, serverError } from '../../helpers/http-helper';
 import { URLController } from './URLController';
 import { SuffixCreator, AddURL, AddURLModel } from './url-protocols';
+
 describe('URLController', () => {
   class SuffixCreatorStub implements SuffixCreator {
     createSuffix() {
@@ -58,5 +59,18 @@ describe('URLController', () => {
     };
     sut.handle(httpRequest);
     expect(addSpy).toHaveBeenCalledWith({ originalURL: httpRequest.body.url, suffix: mockedSuffix });
+  });
+
+  it('Should call return 500 when add URL trows', () => {
+    const { sut, addURLStub } = makeSut();
+    jest.spyOn(addURLStub, 'add').mockImplementationOnce(() => {
+      throw new Error();
+    });
+    const httpRequest = {
+      body: { url: 'http://g.com' },
+    };
+    const httpResponse = sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(500);
+    expect(httpResponse).toEqual(serverError());
   });
 });

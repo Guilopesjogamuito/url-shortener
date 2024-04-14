@@ -1,6 +1,6 @@
 import { Controller, HttpRequest, HttpResponse, SuffixCreator, AddURL } from './url-protocols';
-import { badRequest, ok } from '../../helpers/http-helper';
-import { MissingParamError } from '../../errors/missing-param-error';
+import { badRequest, ok, serverError } from '../../helpers/http-helper';
+import { MissingParamError, ServerError } from '../../errors';
 import {} from '../../../domain/use-cases/add-url';
 
 export class URLController implements Controller {
@@ -17,7 +17,11 @@ export class URLController implements Controller {
       return badRequest(new MissingParamError('URL'));
     }
     const suffix = this.suffixCreator.createSuffix();
-    this.addUrl.add({ originalURL: httpRequest.body.url, suffix });
+    try {
+      this.addUrl.add({ originalURL: httpRequest.body.url, suffix });
+    } catch (error) {
+      return serverError();
+    }
     return ok({});
   }
 }
