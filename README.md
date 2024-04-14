@@ -2,5 +2,5 @@
 
 This is a simple project, for demonstration purposes.
 
-- [ ] `POST /url`
+- [x] `POST /url` (highly coupled)
 - [ ] `GET /url/{id}`

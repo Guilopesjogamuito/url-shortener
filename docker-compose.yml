@@ -10,6 +10,8 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+    environment:
+      - MONGO_CONNECTION=mongodb://database:27017/url-shortener
     depends_on:
       - database
     command: ["npx", "ts-node-dev", "--respawn", "--transpile-only", "src/app.ts"]
