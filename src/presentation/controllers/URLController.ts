@@ -1,8 +1,6 @@
-import { HttpRequest, HttpResponse } from '../protocols/http';
-import { Controller } from '../protocols/controller';
+import { Controller, HttpRequest, HttpResponse, SuffixCreator } from '../protocols';
 import { badRequest, ok } from '../helpers/http-helper';
 import { MissingParamError } from '../errors/missing-param-error';
-import { SuffixCreator } from '../protocols/suffix-creator';
 
 export class URLController implements Controller {
   private readonly suffixCreator: SuffixCreator;

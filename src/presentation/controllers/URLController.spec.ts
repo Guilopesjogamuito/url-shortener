@@ -1,7 +1,8 @@
 import { MissingParamError } from '../errors/missing-param-error';
 import { badRequest, ok } from '../helpers/http-helper';
 import { URLController } from './URLController';
-import { SuffixCreator } from '../protocols/suffix-creator';
+import { SuffixCreator } from '../protocols';
+
 describe('URLController', () => {
   const makeSut = (): URLController => {
     class SuffixCreatorStub implements SuffixCreator {
