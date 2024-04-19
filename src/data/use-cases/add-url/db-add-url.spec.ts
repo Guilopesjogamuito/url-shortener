@@ -37,4 +37,16 @@ describe('DbAddURL Usecase', () => {
       suffix: 'SUFFIX',
     });
   });
+
+  it('Should throw if AddURLRepository throws', async () => {
+    const { sut, addURLRepositoryStub } = makeSut();
+    jest.spyOn(addURLRepositoryStub, 'add').mockReturnValueOnce(new Promise((_, reject) => reject(new Error())));
+
+    const urlData = {
+      originalURL: 'http://valid.com',
+      suffix: 'SUFFIX',
+    };
+    const promise = sut.add(urlData);
+    expect(promise).rejects.toThrow();
+  });
 });
