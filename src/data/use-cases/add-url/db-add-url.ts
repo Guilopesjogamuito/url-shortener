@@ -8,14 +8,7 @@ export class DbAddURL implements AddURL {
   }
 
   async add(urlObject: AddURLModel): Promise<URLModel> {
-    await this.repository.add(urlObject);
-    return new Promise((resolve) =>
-      resolve({
-        originalURL: urlObject.originalURL,
-        suffix: urlObject.suffix,
-        createdAt: new Date(),
-        expiresAt: new Date(),
-      }),
-    );
+    const addedURL = await this.repository.add(urlObject);
+    return new Promise((resolve) => resolve(addedURL));
   }
 }

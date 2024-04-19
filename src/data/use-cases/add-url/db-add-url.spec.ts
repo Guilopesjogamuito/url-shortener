@@ -49,4 +49,20 @@ describe('DbAddURL Usecase', () => {
     const promise = sut.add(urlData);
     expect(promise).rejects.toThrow();
   });
+
+  it('Should return an URLModel on success', async () => {
+    const { sut } = makeSut();
+
+    const urlData = {
+      originalURL: 'http://valid.com',
+      suffix: 'SUFFIX',
+    };
+    const urlAdded = await sut.add(urlData);
+    expect(urlAdded).toEqual({
+      originalURL: 'test',
+      suffix: 'test',
+      createdAt: new Date(),
+      expiresAt: new Date(),
+    });
+  });
 });
