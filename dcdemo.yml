@@ -1,0 +1,18 @@
+version: '3'
+services:
+  url-shortener-api:
+    image: guilhermelopes764/url-shortener-api:latest
+    ports:
+      - '7000:7000'
+    environment:
+      - MONGO_CONNECTION=mongodb://url-shortener-database:27017/url-shortener
+    depends_on:
+      - url-shortener-database
+  url-shortener-database:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb_data_demo:/data/db
+volumes:
+  mongodb_data_demo:
