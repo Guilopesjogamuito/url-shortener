@@ -7,6 +7,10 @@ describe('URL Mongo Repository', () => {
   afterAll(async () => {
     await MongoHelper.disconnect();
   });
+  beforeEach(async () => {
+    const urlCollection = MongoHelper.getCollection('urls');
+    await urlCollection.deleteMany({});
+  });
 
   it('Should return an URL on success', async () => {
     const sut = new URLMongoRepository();
@@ -15,8 +19,9 @@ describe('URL Mongo Repository', () => {
       suffix: 'test',
     });
     expect(url).toBeTruthy();
-    // expect(url._id).toBeTruthy();
     expect(url.originalURL).toBe('test');
     expect(url.suffix).toBe('test');
+    expect(url.createdAt).toBeTruthy();
+    expect(url.expiresAt).toBeTruthy();
   });
 });
