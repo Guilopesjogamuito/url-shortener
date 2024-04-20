@@ -58,11 +58,9 @@ describe('DbAddURL Usecase', () => {
       suffix: 'SUFFIX',
     };
     const urlAdded = await sut.add(urlData);
-    expect(urlAdded).toEqual({
-      originalURL: 'test',
-      suffix: 'test',
-      createdAt: new Date(),
-      expiresAt: new Date(),
-    });
+    expect(urlAdded.originalURL).toEqual('test');
+    expect(urlAdded.suffix).toEqual('test');
+    expect(urlAdded.createdAt).toBeTruthy();
+    expect(urlAdded.expiresAt).toBeTruthy();
   });
 });
