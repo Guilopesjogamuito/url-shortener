@@ -13,6 +13,7 @@ const config: Config = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
+  preset: '@shelf/jest-mongodb',
 };
 
 export default config;
