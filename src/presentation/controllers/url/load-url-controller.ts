@@ -1,13 +1,14 @@
-import { Controller, HttpRequest, HttpResponse } from './url-protocols';
+import { Controller, HttpRequest, HttpResponse, SuffixValidator, LoadURLBySuffix } from './url-protocols';
 import { badRequest, ok, serverError } from '../../helpers/http-helper';
 import { MissingParamError, InvalidParamError } from '../../errors';
-import { SuffixValidator } from '../../protocols/suffix-validator';
 
 export class LoadURLController implements Controller {
   private readonly validator;
+  private readonly loadURL: LoadURLBySuffix;
 
-  constructor(validator: SuffixValidator) {
+  constructor(validator: SuffixValidator, loadURLBySuffix: LoadURLBySuffix) {
     this.validator = validator;
+    this.loadURL = loadURLBySuffix;
   }
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -19,7 +20,8 @@ export class LoadURLController implements Controller {
     if (!valid) return badRequest(new InvalidParamError('Suffix'));
 
     try {
-      return ok({});
+      const loadedURL = await this.loadURL.load(httpRequest.params.suffix);
+      return ok({ originalURL: loadedURL.originalURL });
     } catch (error) {
       return serverError();
     }
