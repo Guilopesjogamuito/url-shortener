@@ -3,7 +3,9 @@
 This is a simple project, for demonstration purposes. My intention is to develop using TDD (kinda) and apply concepts of [Clean Architeture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 
 - [x] `POST /url`
-- [ ] `GET /url/{id}`
+- [x] `GET /url/{id}`
+- [ ] `POST /signup`
+- [ ] `POST /login`
 
 # Getting started:
 
@@ -20,6 +22,8 @@ cd url-shortener
 
 docker compose -f dcdemo up
 ```
+
+This will download docker images for all the services and start them. Then you'll be able to make requests!
 
 Request example:
 
