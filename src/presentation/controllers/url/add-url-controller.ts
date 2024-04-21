@@ -1,9 +1,8 @@
 import { Controller, HttpRequest, HttpResponse, SuffixCreator, AddURL } from './url-protocols';
 import { badRequest, ok, serverError } from '../../helpers/http-helper';
-import { MissingParamError, ServerError } from '../../errors';
-import {} from '../../../domain/use-cases/add-url';
+import { MissingParamError } from '../../errors';
 
-export class URLController implements Controller {
+export class AddURLController implements Controller {
   private readonly suffixCreator: SuffixCreator;
   private readonly addUrl: AddURL;
 
