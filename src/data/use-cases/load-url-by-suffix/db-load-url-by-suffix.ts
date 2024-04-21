@@ -10,7 +10,9 @@ export class DbLoadURLBySuffix implements LoadURLBySuffix {
   }
 
   async load(suffix: string): Promise<URLModel | null> {
-    this.repository.load(suffix);
+    const loadedURL = await this.repository.load(suffix);
+
+    if (loadedURL) return new Promise((resolve) => resolve(loadedURL));
     return new Promise((resolve) => resolve(null));
   }
 }

@@ -29,4 +29,14 @@ describe('DbLoadURLBySuffix Usecase', () => {
     await sut.load('SUFFIX');
     expect(addSpy).toHaveBeenCalledWith('SUFFIX');
   });
+
+  it('Should throw if LoadURLBySuffixRepository throws', async () => {
+    const { sut, loadURLBySuffixRepositoryStub } = makeSut();
+    jest
+      .spyOn(loadURLBySuffixRepositoryStub, 'load')
+      .mockReturnValueOnce(new Promise((_, reject) => reject(new Error())));
+
+    const promise = sut.load('Suffix');
+    expect(promise).rejects.toThrow();
+  });
 });
