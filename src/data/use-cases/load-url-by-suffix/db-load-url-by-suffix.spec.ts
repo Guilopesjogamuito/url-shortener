@@ -39,4 +39,14 @@ describe('DbLoadURLBySuffix Usecase', () => {
     const promise = sut.load('Suffix');
     expect(promise).rejects.toThrow();
   });
+
+  it('Should return an URLModel on success', async () => {
+    const { sut } = makeSut();
+
+    const urlLoaded = (await sut.load('SUFIX')) as URLModel;
+    expect(urlLoaded.originalURL).toEqual('test');
+    expect(urlLoaded.suffix).toEqual('test');
+    expect(urlLoaded.createdAt).toBeTruthy();
+    expect(urlLoaded.expiresAt).toBeTruthy();
+  });
 });
