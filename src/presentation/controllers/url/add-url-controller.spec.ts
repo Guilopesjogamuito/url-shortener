@@ -73,7 +73,7 @@ describe('AddURLController', () => {
     expect(addSpy).toHaveBeenCalledWith({ originalURL: httpRequest.body.url, suffix: mockedSuffix });
   });
 
-  it('Should call return 500 when add URL trows', async () => {
+  it('Should return 500 when add URL trows', async () => {
     const { sut, addURLStub } = makeSut();
     jest.spyOn(addURLStub, 'add').mockImplementationOnce(async () => {
       return new Promise((_, reject) => reject(new Error()));
