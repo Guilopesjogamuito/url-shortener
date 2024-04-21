@@ -8,6 +8,12 @@ export const adaptRoute = (controller: Controller) => {
       params: req.params ? req.params : undefined,
     };
     const httpResponse: HttpResponse = await controller.handle(httpRequest);
+    if (httpResponse.headers) {
+      for (const header of Object.entries(httpResponse.headers)) {
+        const [name, value] = header;
+        res.setHeader(name, value as string);
+      }
+    }
     return res.status(httpResponse.statusCode).json(httpResponse.body);
   };
 };
