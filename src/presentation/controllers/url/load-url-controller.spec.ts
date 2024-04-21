@@ -1,7 +1,7 @@
 import { URLModel } from '../../../domain/models/url';
 import { LoadURLBySuffix } from '../../../domain/use-cases/load-url-by-suffix';
 import { MissingParamError, InvalidParamError } from '../../errors';
-import { badRequest, notFound } from '../../helpers/http-helper';
+import { badRequest, notFound, serverError } from '../../helpers/http-helper';
 import { SuffixValidator } from '../../protocols/suffix-validator';
 import { LoadURLController } from './load-url-controller';
 
@@ -79,5 +79,18 @@ describe('LoadURLController', () => {
     const expected = notFound();
     const response = await sut.handle(httpRequest);
     expect(response).toEqual(expected);
+  });
+
+  it('Should return 500 when load URL trows', async () => {
+    const { sut, loadURLStub } = makeSut();
+    jest.spyOn(loadURLStub, 'load').mockImplementationOnce(async () => {
+      return new Promise((_, reject) => reject(new Error()));
+    });
+    const httpRequest = {
+      params: { suffix: 'valid_suffix' },
+    };
+    const httpResponse = await sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(500);
+    expect(httpResponse).toEqual(serverError());
   });
 });
