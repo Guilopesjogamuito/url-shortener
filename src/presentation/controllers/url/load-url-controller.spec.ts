@@ -101,8 +101,6 @@ describe('LoadURLController', () => {
     };
     const response = await sut.handle(httpRequest);
     expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual({
-      originalURL: 'http://g.com',
-    });
+    expect(response.body).toEqual('http://g.com');
   });
 });

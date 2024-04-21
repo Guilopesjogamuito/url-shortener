@@ -21,7 +21,7 @@ export class LoadURLController implements Controller {
 
     try {
       const loadedURL = await this.loadURL.load(httpRequest.params.suffix);
-      if (loadedURL) return ok({ originalURL: loadedURL.originalURL });
+      if (loadedURL) return ok(loadedURL.originalURL);
       return notFound();
     } catch (error) {
       return serverError();
