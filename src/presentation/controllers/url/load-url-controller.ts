@@ -1,5 +1,5 @@
 import { Controller, HttpRequest, HttpResponse, SuffixValidator, LoadURLBySuffix } from './url-protocols';
-import { badRequest, ok, serverError, notFound } from '../../helpers/http-helper';
+import { badRequest, serverError, notFound, found } from '../../helpers/http-helper';
 import { MissingParamError, InvalidParamError } from '../../errors';
 
 export class LoadURLController implements Controller {
@@ -21,7 +21,7 @@ export class LoadURLController implements Controller {
 
     try {
       const loadedURL = await this.loadURL.load(httpRequest.params.suffix);
-      if (loadedURL) return ok(loadedURL.originalURL);
+      if (loadedURL) return found(loadedURL.originalURL);
       return notFound();
     } catch (error) {
       return serverError();

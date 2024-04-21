@@ -6,6 +6,12 @@ export const badRequest = (error: Error): HttpResponse => ({
   body: error.message,
 });
 
+export const found = (location: string): HttpResponse => ({
+  statusCode: 302,
+  headers: { Location: location },
+  body: {},
+});
+
 export const ok = (body: any): HttpResponse => ({
   statusCode: 200,
   body,

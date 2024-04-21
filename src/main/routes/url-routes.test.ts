@@ -30,9 +30,9 @@ describe('URL Routes', () => {
     await request(app).get('/ABCDE').expect(404);
   });
 
-  it('Should return 200 for suffix found', async () => {
+  it('Should return 302 for suffix found', async () => {
     const response = await request(app).post('/url').send({ url: 'g.com' });
     const { suffix } = response.body;
-    await request(app).get(`/${suffix}`).expect(200);
+    await request(app).get(`/${suffix}`).expect(302);
   });
 });
