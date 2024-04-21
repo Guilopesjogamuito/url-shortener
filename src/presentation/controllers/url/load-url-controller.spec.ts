@@ -93,4 +93,16 @@ describe('LoadURLController', () => {
     expect(httpResponse.statusCode).toBe(500);
     expect(httpResponse).toEqual(serverError());
   });
+
+  it('Should return 200 if suffix is provided', async () => {
+    const { sut } = makeSut();
+    const httpRequest = {
+      params: { suffix: 'Valid' },
+    };
+    const response = await sut.handle(httpRequest);
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual({
+      originalURL: 'http://g.com',
+    });
+  });
 });
