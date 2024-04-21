@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import { makeUrlController } from '../factories/url';
+import { makeAddUrlController, makeLoadUrlBySuffixController } from '../factories/url';
 import { adaptRoute } from '../adapters/express-routes-adapter';
 
 export default (router: Router) => {
-  const urlController = makeUrlController();
-  const adapted = adaptRoute(urlController);
-  router.post('/url', adapted);
+  const addUrlController = makeAddUrlController();
+  const loadURLController = makeLoadUrlBySuffixController();
+  router.get('/:suffix', adaptRoute(loadURLController));
+  router.post('/url', adaptRoute(addUrlController));
 };

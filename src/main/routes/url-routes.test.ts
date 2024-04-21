@@ -21,4 +21,18 @@ describe('URL Routes', () => {
       })
       .expect(200);
   });
+
+  it('Should return 400 for invalid length', async () => {
+    await request(app).get('/ABCDaaE').expect(400);
+  });
+
+  it('Should return 404 for suffix not found', async () => {
+    await request(app).get('/ABCDE').expect(404);
+  });
+
+  it('Should return 200 for suffix found', async () => {
+    const response = await request(app).post('/url').send({ url: 'g.com' });
+    const { suffix } = response.body;
+    await request(app).get(`/${suffix}`).expect(200);
+  });
 });

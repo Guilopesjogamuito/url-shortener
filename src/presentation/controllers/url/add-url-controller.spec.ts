@@ -1,10 +1,10 @@
 import { URLModel } from '../../../domain/models/url';
-import { MissingParamError, ServerError } from '../../errors';
-import { badRequest, ok, serverError } from '../../helpers/http-helper';
-import { URLController } from './URLController';
+import { MissingParamError } from '../../errors';
+import { badRequest, serverError } from '../../helpers/http-helper';
+import { AddURLController } from './add-url-controller';
 import { SuffixCreator, AddURL, AddURLModel } from './url-protocols';
 
-describe('URLController', () => {
+describe('AddURLController', () => {
   class SuffixCreatorStub implements SuffixCreator {
     createSuffix() {
       return 'SuFfIx';
@@ -27,11 +27,11 @@ describe('URLController', () => {
     return new AddURLStub();
   };
 
-  const makeSut = (): { sut: URLController; suffixCreatorStub: SuffixCreatorStub; addURLStub: AddURLStub } => {
+  const makeSut = (): { sut: AddURLController; suffixCreatorStub: SuffixCreatorStub; addURLStub: AddURLStub } => {
     const suffixCreatorStub = new SuffixCreatorStub();
     const addURLStub = makeAddURL();
     return {
-      sut: new URLController(suffixCreatorStub, addURLStub),
+      sut: new AddURLController(suffixCreatorStub, addURLStub),
       suffixCreatorStub: suffixCreatorStub,
       addURLStub: addURLStub,
     };
@@ -73,7 +73,7 @@ describe('URLController', () => {
     expect(addSpy).toHaveBeenCalledWith({ originalURL: httpRequest.body.url, suffix: mockedSuffix });
   });
 
-  it('Should call return 500 when add URL trows', async () => {
+  it('Should return 500 when add URL trows', async () => {
     const { sut, addURLStub } = makeSut();
     jest.spyOn(addURLStub, 'add').mockImplementationOnce(async () => {
       return new Promise((_, reject) => reject(new Error()));
