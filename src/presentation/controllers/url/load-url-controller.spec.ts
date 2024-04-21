@@ -1,3 +1,5 @@
+import { URLModel } from '../../../domain/models/url';
+import { LoadURLBySuffix } from '../../../domain/use-cases/load-url-by-suffix';
 import { MissingParamError, InvalidParamError } from '../../errors';
 import { badRequest } from '../../helpers/http-helper';
 import { SuffixValidator } from '../../protocols/suffix-validator';
@@ -9,11 +11,29 @@ describe('LoadURLController', () => {
       return true;
     }
   }
-  const makeSut = (): { sut: LoadURLController; suffixValidatorStub: SuffixValidatorStub } => {
+  class LoadURLStub implements LoadURLBySuffix {
+    async load(suffix: string): Promise<URLModel> {
+      return new Promise((resolve) =>
+        resolve({
+          originalURL: 'http://g.com',
+          suffix: 'Suffix',
+          createdAt: new Date(1),
+          expiresAt: new Date(1),
+        }),
+      );
+    }
+  }
+  const makeSut = (): {
+    sut: LoadURLController;
+    suffixValidatorStub: SuffixValidatorStub;
+    loadURLStub: LoadURLStub;
+  } => {
     const suffixValidatorStub = new SuffixValidatorStub();
+    const loadURLStub = new LoadURLStub();
     return {
-      sut: new LoadURLController(suffixValidatorStub),
+      sut: new LoadURLController(suffixValidatorStub, loadURLStub),
       suffixValidatorStub,
+      loadURLStub,
     };
   };
 
@@ -36,5 +56,15 @@ describe('LoadURLController', () => {
     const expected = badRequest(new InvalidParamError('Suffix'));
     const response = await sut.handle(httpRequest);
     expect(response).toEqual(expected);
+  });
+
+  it('Should call LoadURL with correct values', async () => {
+    const { sut, loadURLStub } = makeSut();
+    const addSpy = jest.spyOn(loadURLStub, 'load');
+    const httpRequest = {
+      params: { suffix: 'SuFfIx' },
+    };
+    await sut.handle(httpRequest);
+    expect(addSpy).toHaveBeenCalledWith('SuFfIx');
   });
 });
