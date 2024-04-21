@@ -3,7 +3,7 @@
 This is a simple project, for demonstration purposes. My intention is to develop using TDD (kinda) and apply concepts of [Clean Architeture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 
 - [x] `POST /url`
-- [x] `GET /url/{id}`
+- [x] `GET /{suffix}`
 - [ ] `POST /signup`
 - [ ] `POST /login`
 
