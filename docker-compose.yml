@@ -11,9 +11,12 @@ services:
       - .:/app
       - /app/node_modules
     environment:
+      - DATABASE=${DATABASE}
       - MONGO_CONNECTION=mongodb://database:27017/url-shortener
+      - POSTGRES_CONNECTION=postgresql://postgres:password@database2:5432/url_shortener_db
     depends_on:
       - database
+      - database2
     command: ["npx", "ts-node-dev", "--respawn", "--transpile-only", "src/main/server.ts"]
   database:
     image: mongo:latest
@@ -21,5 +24,28 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
+
+  database2:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: url_shortener_db
+      DATABASE: postgresql
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    condition: "$${DATABASE == 'mongodb'}"
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "pgadmin@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "password"
+      DATABASE: postgresql
+    ports:
+      - "5050:80"
+    depends_on:
+      - database2
+
 volumes:
   mongodb_data:
